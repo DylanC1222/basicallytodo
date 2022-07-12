@@ -38,43 +38,7 @@ export const addTask = createAsyncThunk("tasks/addTaskStatus", async (task) => {
 export const todoSlice = createSlice({
 	name: "todo",
 	initialState,
-	reducers: {
-		// addTask: (state, action) => {
-		// 	return {
-		// 		...state,
-		// 		list: state.list.push({
-		// 			text: action.payload.text,
-		// 			completed: action.payload.completed,
-		// 		}),
-		// 	};
-		// },
-		// deleteTask: (state, action) => {
-		// 	return {
-		// 		...state,
-		// 		list: state.list.filter(
-		// 			(item, index) => index !== Number(action.payload)
-		// 		),
-		// 	};
-		// },
-		// completeTask: (state, action) => {
-		// 	return {
-		// 		...state,
-		// 		list: state.list.map((item, index) => {
-		// 			if (index === Number(action.payload)) {
-		// 				return { ...item, completed: true };
-		// 			} else {
-		// 				return item;
-		// 			}
-		// 		}),
-		// 	};
-		// },
-		// updateTasks: (state, action) => {
-		// 	return { list: action.payload, is_loaded: true };
-		// },
-		// loadTasks: (state, action) => {
-		// 	return { ...state, is_loaded: action.payload };
-		// },
-	},
+	reducers: {},
 	extraReducers(builder) {
 		builder.addCase(fetchTaskList.fulfilled, (state, action) => {
 			return { list: action.payload, is_loaded: true };
@@ -82,6 +46,7 @@ export const todoSlice = createSlice({
 		builder.addCase(updateTask.fulfilled, (state, action) => {
 			return {
 				...state,
+				is_loaded: false,
 				list: state.list.map((item, index) => {
 					if (index === Number(action.payload)) {
 						return { ...item, completed: !item.completed };
@@ -94,13 +59,18 @@ export const todoSlice = createSlice({
 		builder.addCase(deleteTask.fulfilled, (state, action) => {
 			return {
 				...state,
+				is_loaded: false,
 				list: state.list.filter(
 					(item, index) => index !== Number(action.payload)
 				),
 			};
 		});
 		builder.addCase(addTask.fulfilled, (state, action) => {
-			state.list.push({ text: action.payload, completed: false });
+			return {
+				...state,
+				is_loaded: false,
+				list: state.list.concat([{ text: action.payload, completed: false }]),
+			};
 		});
 	},
 });

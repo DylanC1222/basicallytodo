@@ -16,11 +16,6 @@ function App() {
 	const dispatch = useDispatch();
 	const is_loaded = useSelector((state) => state.todo.is_loaded);
 
-	const addBucketList = async () => {
-		dispatch(addTask({ text: text.current.value }));
-		text.current.value = "";
-	};
-
 	return (
 		<div className="App">
 			<Container>
@@ -35,7 +30,13 @@ function App() {
 			</Container>
 			<Input>
 				<input type="text" ref={text} />
-				<button onClick={addBucketList}>Add</button>
+				<button
+					onClick={() => {
+						dispatch(addTask({ text: text.current.value }));
+						text.current.value = "";
+					}}>
+					Add
+				</button>
 			</Input>
 			{!is_loaded && <Spinner />}
 		</div>

@@ -9,9 +9,12 @@ const BucketList = (props) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	const loaded = useSelector((state) => state.todo.is_loaded);
 	React.useEffect(() => {
-		dispatch(fetchTaskList()); // eslint-disable-next-line
-	}, []);
+		if (loaded === false) {
+			dispatch(fetchTaskList());
+		}
+	}, [loaded, dispatch]);
 
 	const data = useSelector((state) => state.todo.list);
 
